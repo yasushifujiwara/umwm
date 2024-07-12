@@ -189,7 +189,7 @@ real,dimension(:),allocatable :: wspd,wdir
 real,dimension(:),allocatable :: fice
 
 ! snl downshifting weights, used in snl routine:
-real,dimension(:,:),allocatable :: bf1_renorm,bf2_renorm
+real,dimension(:,:),allocatable :: bf0_renorm,bf1_renorm,bf2_renorm
 
 ! utility array used for mss in sds routine:
 real,dimension(:,:),allocatable :: cth2pp

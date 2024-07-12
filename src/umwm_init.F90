@@ -342,6 +342,7 @@ elseif(option==2)then
   psim = 0
 
   ! 3-d arrays (remapped):
+  allocate(bf0_renorm(om,istart:iend))  
   allocate(bf1_renorm(om,istart:iend))
   allocate(bf2_renorm(om,istart:iend))
   allocate(    cothkd(om,istart:iend))
@@ -1514,14 +1515,16 @@ do concurrent (o=1:om, i=istart:iend)
 end do
 
 ! compute renormalization factors for snl:
+bf0_renorm = 0.
 bf1_renorm = 0.
 bf2_renorm = 0.
 snl_arg    = 0.
 
 do i=istart,iend
   do o=1,om-2
-    bf1_renorm(o,i) = snl_fac*bf1*kdk(o+1,i)/kdk(o,i)
-    bf2_renorm(o,i) = snl_fac*bf2*kdk(o+2,i)/kdk(o,i)
+    bf1_renorm(o,i) = snl_fac*bf1*k(o+1,i)/kdk(o,i)
+    bf2_renorm(o,i) = snl_fac*bf2*k(o+2,i)/kdk(o,i)
+    bf0_renorm(o,i) = -snl_fac/dwn(o,i)
     snl_arg(o,i)    = 1.-(bf1_renorm(o,i)+bf2_renorm(o,i))
   end do
 end do
