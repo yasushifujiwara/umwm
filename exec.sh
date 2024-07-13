@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Define the list of expnames and num_proc
-expnames=("exp1" "exp2" "exp3")  # Replace with your actual experiment names
-num_proc=4  # Replace with the actual number of processors to use
+expnames=("test/om101_old")  # Replace with your actual experiment names
+num_proc=6  # Replace with the actual number of processors to use
 
 # Get the current date and time for the log file
 current_datetime=$(date '+%Y%m%d_%H%M%S')
@@ -24,7 +24,7 @@ for expname in "${expnames[@]}"; do
   log_message "Processing $expname"
 
   # Create symbolic links
-  ./pre_run.sh "$expname"
+  ./pre_run.sh "$expname" 
   log_message "Created symbolic links for $expname"
 
   # Run the MPI job
