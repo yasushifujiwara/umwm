@@ -1524,7 +1524,7 @@ do i=istart,iend
   do o=1,om-2
     bf1_renorm(o,i) = snl_fac*bf1*k(o+1,i)/kdk(o,i)
     bf2_renorm(o,i) = snl_fac*bf2*k(o+2,i)/kdk(o,i)
-    bf0_renorm(o,i) = -snl_fac/dwn(o,i)
+    bf0_renorm(o,i) = snl_fac/dwn(o,i)
     snl_arg(o,i)    = 1.-(bf1_renorm(o,i)+bf2_renorm(o,i))
   end do
 end do
