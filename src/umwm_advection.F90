@@ -145,13 +145,23 @@ contains
       if (maxval(flux) <= tiny(sendbuffer)) then
         dtr_temp = dts
       else
-#ifdef MPI
-        sendbuffer = dth / maxval(flux)
-        call mpi_allreduce(sendbuffer, dtr_temp, 1, MPI_REAL, mpi_min, MPI_COMM_WORLD, ierr)
-#else
         dtr_temp = dth / maxval(flux)
-#endif
       end if
+#ifdef MPI
+      sendbuffer = dtr_temp
+      call mpi_allreduce(sendbuffer, dtr_temp, 1, MPI_REAL, mpi_min, MPI_COMM_WORLD, ierr)
+#endif
+
+!       if (maxval(flux) <= tiny(sendbuffer)) then
+!         dtr_temp = dts
+!       else
+! #ifdef MPI
+!         sendbuffer = dth / maxval(flux)
+!         call mpi_allreduce(sendbuffer, dtr_temp, 1, MPI_REAL, mpi_min, MPI_COMM_WORLD, ierr)
+! #else
+!         dtr_temp = dth / maxval(flux)
+! #endif
+!       end if
 
     end if
 
