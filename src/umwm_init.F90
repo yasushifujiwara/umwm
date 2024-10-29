@@ -69,7 +69,7 @@ stoptimestr,dtg,restart
 
 namelist /physics/ g,nu_air,nu_water,sfct,kappa,z,gustiness,dmin,    &
 explim,sin_fac,sin_diss1,sin_diss2,sds_fac,sds_power,mss_fac,snl_fac,&
-sdt_fac,sbf_fac,sbp_fac
+sdt_fac,sbf_fac,sbp_fac,snl_mode
 
 namelist /grid/ gridfromfile,delx,dely,topofromfile,dpt,fillestuaries,&
 filllakes
@@ -1520,14 +1520,25 @@ bf1_renorm = 0.
 bf2_renorm = 0.
 snl_arg    = 0.
 
-do i=istart,iend
-  do o=1,om-2
-    bf1_renorm(o,i) = snl_fac*bf1*k(o+1,i)/kdk(o,i)
-    bf2_renorm(o,i) = snl_fac*bf2*k(o+2,i)/kdk(o,i)
-    bf0_renorm(o,i) = snl_fac/dwn(o,i)
-    snl_arg(o,i)    = 1.-(bf1_renorm(o,i)+bf2_renorm(o,i))
+if (snl_mode == 0) then
+  do i=istart,iend
+    do o=1,om-2
+      bf1_renorm(o,i) = snl_fac*bf1*kdk(o+1,i)/kdk(o,i)
+      bf2_renorm(o,i) = snl_fac*bf2*kdk(o+2,i)/kdk(o,i)
+      bf0_renorm(o,i) = snl_fac
+      snl_arg(o,i)    = 1.-(bf1_renorm(o,i)+bf2_renorm(o,i))
+    end do
   end do
-end do
+else if (snl_mode == 1) then
+  do i=istart,iend
+    do o=1,om-2
+      bf1_renorm(o,i) = snl_fac*bf1*k(o+1,i)/kdk(o,i)
+      bf2_renorm(o,i) = snl_fac*bf2*k(o+2,i)/kdk(o,i)
+      bf0_renorm(o,i) = snl_fac/dwn(o,i)
+      snl_arg(o,i)    = 1.-(bf1_renorm(o,i)+bf2_renorm(o,i))
+    end do
+  end do
+end if    
 
 ! half-wavelength over z:
 logl2overz = log(l2/z)

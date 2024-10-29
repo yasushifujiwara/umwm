@@ -56,6 +56,10 @@ logical :: gridfromfile,topofromfile,filllakes,fillestuaries
 integer :: outgrid,outspec,outrst
 logical :: stokes
 
+! s_nl scheme switch
+! if 0: original, 1: consistent
+integer :: snl_mode = 0
+
 ! time steps:
 real :: dta,dtr,dtamin
 
