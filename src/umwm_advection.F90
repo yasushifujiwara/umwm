@@ -108,6 +108,7 @@ contains
     logical :: compute_rotation_tendency
     real :: sendbuffer
     real, save :: dtr_temp
+    integer :: n_split
 
     real :: flux(om,pm,istart:iend)
 
@@ -147,6 +148,9 @@ contains
       else
         dtr_temp = dth / maxval(flux)
       end if
+
+      dtr_temp = dtr_temp * 0.5 ! limit for stability
+     
 #ifdef MPI
       sendbuffer = dtr_temp
       call mpi_allreduce(sendbuffer, dtr_temp, 1, MPI_REAL, mpi_min, MPI_COMM_WORLD, ierr)
@@ -161,32 +165,38 @@ contains
 ! #else
 !         dtr_temp = dth / maxval(flux)
 ! #endif
-!       end if
+      !       end if
 
     end if
 
-    dtr = min(dtr_temp, dts)
 
-    flux = 0
-    do concurrent(i = istart:iend)
-      do concurrent(o = 1:oc(i), p = 1:pm)
+    dtr = min(dtr_temp, dts/split_refraction)
 
-        ! compute tendencies
-        flux(o,p,i) = 0.5 * ((rotl(o,p,i) + abs(rotl(o,p,i))) * e(o,p,i)    &
-                           + (rotl(o,p,i) - abs(rotl(o,p,i))) * e(o,pl(p),i)&
-                           - (rotr(o,p,i) + abs(rotr(o,p,i))) * e(o,pr(p),i)&
-                           - (rotr(o,p,i) - abs(rotr(o,p,i))) * e(o,p,i))   &
-                     * oneovdth
-        ! integrate
-        ef(o,p,i) = ef(o,p,i) - dtr * flux(o,p,i)
-        
-        if (fice(i) > fice_uth) then
-          ef(o,p,i) = 0.0
-        end if
+    do n_split = 1, split_refraction
+     flux = 0
+     do concurrent(i = istart:iend)
+       do concurrent(o = 1:oc(i), p = 1:pm)
 
-      end do
+         ! compute tendencies
+         flux(o,p,i) = 0.5 * ((rotl(o,p,i) + abs(rotl(o,p,i))) * e(o,p,i)    &
+                            + (rotl(o,p,i) - abs(rotl(o,p,i))) * e(o,pl(p),i)&
+                            - (rotr(o,p,i) + abs(rotr(o,p,i))) * e(o,pr(p),i)&
+                            - (rotr(o,p,i) - abs(rotr(o,p,i))) * e(o,p,i))   &
+                      * oneovdth
+         ! integrate
+         ef(o,p,i) = ef(o,p,i) - dtr * flux(o,p,i)
+         
+         if (fice(i) > fice_uth) then
+           ef(o,p,i) = 0.0
+         end if
+
+       end do
+     end do
+
+     e(:,:,istart:iend) = ef(:,:,istart:iend)
+     
     end do
-
+     
   end subroutine refraction
 
 end module umwm_advection

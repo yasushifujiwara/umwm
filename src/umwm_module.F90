@@ -63,6 +63,9 @@ integer :: snl_mode = 0
 ! time steps:
 real :: dta,dtr,dtamin
 
+! time-splitting switches:
+integer :: split_refraction = 1
+
 ! miscellaneous variables
 real :: bf1,bf1a,bf2
 real :: cgmax,cfllim
