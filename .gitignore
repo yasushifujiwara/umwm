@@ -27,5 +27,8 @@ umwmrst_*.nc
 log/*
 
 namelists
+input
+output
+restart
 
 Makefile_*
