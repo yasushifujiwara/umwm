@@ -27,3 +27,5 @@ umwmrst_*.nc
 log/*
 
 namelists
+
+Makefile_*
