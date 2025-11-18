@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Define the list of expnames and num_proc
-expnames=("test/om101_old")  # Replace with your actual experiment names
-num_proc=6  # Replace with the actual number of processors to use
+expnames=("mc2/w1")  # Replace with your actual experiment names
+num_proc=32  # Replace with the actual number of processors to use
 
 # Get the current date and time for the log file
 current_datetime=$(date '+%Y%m%d_%H%M%S')

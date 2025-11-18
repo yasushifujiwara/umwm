@@ -173,8 +173,9 @@ contains
     dtr = min(dtr_temp, dts/split_refraction)
 
     do n_split = 1, split_refraction
-     flux = 0
-     do concurrent(i = istart:iend)
+      flux = 0
+      e(:,:,istart:iend) = ef(:,:,istart:iend)
+      do concurrent(i = istart:iend)
        do concurrent(o = 1:oc(i), p = 1:pm)
 
          ! compute tendencies
@@ -184,7 +185,7 @@ contains
                             - (rotr(o,p,i) - abs(rotr(o,p,i))) * e(o,p,i))   &
                       * oneovdth
          ! integrate
-         ef(o,p,i) = ef(o,p,i) - dtr * flux(o,p,i)
+         ef(o,p,i) = e(o,p,i) - dtr * flux(o,p,i)
          
          if (fice(i) > fice_uth) then
            ef(o,p,i) = 0.0
@@ -192,8 +193,6 @@ contains
 
        end do
      end do
-
-     e(:,:,istart:iend) = ef(:,:,istart:iend)
      
     end do
      
