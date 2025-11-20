@@ -146,7 +146,7 @@ contains
       if (maxval(flux) <= tiny(sendbuffer)) then
         dtr_temp = dts
       else
-        dtr_temp = dth / maxval(flux)
+        dtr_temp = dth / maxval(abs(flux))
       end if
 
       dtr_temp = dtr_temp * 0.5 ! limit for stability
