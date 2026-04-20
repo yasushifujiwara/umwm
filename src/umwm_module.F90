@@ -157,6 +157,7 @@ real,dimension(:),allocatable :: oneovar,oneovdx,oneovdy
 
 real,dimension(:),allocatable :: momx,momy ! momentum in x- and y-direction
 real,dimension(:),allocatable :: cgmxx,cgmxy,cgmyy ! horizontal momentum fluxes
+real,dimension(:),allocatable :: ust0,vst0 ! surface stokes drift components
 real,dimension(:),allocatable :: physics_time_step
 
 ! air and water density:

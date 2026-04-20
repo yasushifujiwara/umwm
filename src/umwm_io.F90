@@ -334,6 +334,7 @@ integer :: psimid
 integer :: zid,usid,vsid,dsid
 integer :: momxid,momyid
 integer :: cgmxxid,cgmxyid,cgmyyid
+integer :: ust0id,vst0id
 integer :: tfdx1id,tfdy1id
 integer :: tfdx2id,tfdy2id
 integer :: tfdx3id,tfdy3id
@@ -468,6 +469,14 @@ if(nproc == 0)then
   stat = nf90_def_var(ncid,'cgmyy',NF90_FLOAT,[xdimid,ydimid,tdimid],cgmyyid)
   stat = nf90_put_att(ncid,cgmyyid,name='description',values='cg*momentum, yy-component')
   stat = nf90_put_att(ncid,cgmyyid,name='units',values='kgm^2/s^2')
+
+  stat = nf90_def_var(ncid,'ust0',NF90_FLOAT,[xdimid,ydimid,tdimid],ust0id)
+  stat = nf90_put_att(ncid,ust0id,name='description',values='surface stokes drift (DW-approx), x-component')
+  stat = nf90_put_att(ncid,ust0id,name='units',values='m/s')
+
+  stat = nf90_def_var(ncid,'vst0',NF90_FLOAT,[xdimid,ydimid,tdimid],vst0id)
+  stat = nf90_put_att(ncid,vst0id,name='description',values='surface stokes drift (DW-approx), y-component')
+  stat = nf90_put_att(ncid,vst0id,name='units',values='m/s')
 
   stat = nf90_def_var(ncid,'shelt',NF90_FLOAT,[xdimid,ydimid,tdimid],sheltid)
   stat = nf90_put_att(ncid,sheltid,name='description',values='sheltering coefficient')
@@ -700,6 +709,12 @@ if(nproc == 0)stat = nf90_put_var(ncid,cgmxyid,output_field,start=[1,1,1],count=
 
 call gatherfield(cgmyy,output_field)
 if(nproc == 0)stat = nf90_put_var(ncid,cgmyyid,output_field,start=[1,1,1],count=[mm,nm,1])
+
+call gatherfield(ust0,output_field)
+if(nproc == 0)stat = nf90_put_var(ncid,ust0id,output_field,start=[1,1,1],count=[mm,nm,1])
+
+call gatherfield(vst0,output_field)
+if(nproc == 0)stat = nf90_put_var(ncid,vst0id,output_field,start=[1,1,1],count=[mm,nm,1])
 
 call gatherfield(shelt,output_field)
 if(nproc == 0)stat = nf90_put_var(ncid,sheltid,output_field,start=[1,1,1],count=[mm,nm,1])

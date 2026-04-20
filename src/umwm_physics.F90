@@ -98,7 +98,7 @@ real                        :: mag,xcomp,ycomp
 real,dimension(istart:iend) :: m0,m2
 real,dimension(om,pm)       :: spectrumbin
 
-real :: ekdkovcp
+real :: ekdkovcp, ekdksgm
 
 m0 = 0
 m2 = 0
@@ -119,6 +119,8 @@ momy = 0
 cgmxx = 0
 cgmxy = 0
 cgmyy = 0
+ust0 = 0
+vst0 = 0
 
 do i=istart,iend
 
@@ -143,6 +145,21 @@ do i=istart,iend
   cgmxx(i) = cgmxx(i)*rhow(i)*dthg
   cgmxy(i) = cgmxy(i)*rhow(i)*dthg
   cgmyy(i) = cgmyy(i)*rhow(i)*dthg
+
+  ! surface stokes drift
+  do p=1,pm
+    do o=1,oc(i)
+
+      ekdksgm = 2*twopi*f(o)*e(o,p,i)*kdk(o,i)
+
+      ust0(i) = ust0(i)+ekdksgm*cth(p)
+      vst0(i) = vst0(i)+ekdksgm*sth(p)
+
+    end do
+  end do
+
+  ust0(i)  = ust0(i)*dthg
+  vst0(i)  = vst0(i)*dthg
 
   ! significant wave height:
   ht(i) = 0.

@@ -280,6 +280,7 @@ elseif(option==2)then
 
   allocate(momx(istart:iend),momy(istart:iend)) ! total wave momentum
   allocate(cgmxx(istart:iend),cgmxy(istart:iend),cgmyy(istart:iend)) ! cg*m
+  allocate(ust0(istart:iend),vst0(istart:iend)) ! surface stokes drift
 
   ! momentum fluxes:
   allocate(taux(istart:iend),tauy(istart:iend))
