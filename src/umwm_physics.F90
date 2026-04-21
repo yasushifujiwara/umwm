@@ -98,7 +98,7 @@ real                        :: mag,xcomp,ycomp
 real,dimension(istart:iend) :: m0,m2
 real,dimension(om,pm)       :: spectrumbin
 
-real :: ekdkovcp, ekdksgm
+real :: ekdkovcp, ekdksgm3
 
 m0 = 0
 m2 = 0
@@ -150,16 +150,16 @@ do i=istart,iend
   do p=1,pm
     do o=1,oc(i)
 
-      ekdksgm = 2*twopi*f(o)*e(o,p,i)*kdk(o,i)
+      ekdksgm3 = 2*(twopi*f(o))**2*invcp0(o,i)*e(o,p,i)*kdk(o,i)
 
-      ust0(i) = ust0(i)+ekdksgm*cth(p)
-      vst0(i) = vst0(i)+ekdksgm*sth(p)
+      ust0(i) = ust0(i)+ekdksgm3*cth(p)
+      vst0(i) = vst0(i)+ekdksgm3*sth(p)
 
     end do
   end do
 
-  ust0(i)  = ust0(i)*dthg
-  vst0(i)  = vst0(i)*dthg
+  ust0(i)  = ust0(i)*dth
+  vst0(i)  = vst0(i)*dth
 
   ! significant wave height:
   ht(i) = 0.
