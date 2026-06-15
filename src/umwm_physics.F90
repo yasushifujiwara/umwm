@@ -81,7 +81,13 @@ do i = istart, iend
   end do
 end do
 
-e(:,:,istart:iend) = 0.5*(e(:,:,istart:iend)+ef(:,:,istart:iend))
+do i = istart, iend
+   if (.not. fixmask(i)) then
+      e(:,:,i) = 0.5*(e(:,:,i)+ef(:,:,i))
+   else if
+      ef(:,:,i) = e(:,:,i)
+   end if
+end if   
 
 endsubroutine source
 

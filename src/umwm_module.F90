@@ -51,6 +51,7 @@ logical :: isglobal,restart
 
 ! grid and bathymetry related switches
 logical :: gridfromfile,topofromfile,filllakes,fillestuaries
+logical :: fixmaskfromfile = .false.
 
 ! output related switches
 integer :: outgrid,outspec,outrst
@@ -134,6 +135,7 @@ real,dimension(:,:),allocatable :: cth_curv,sth_curv
 
 integer,dimension(:,:),allocatable :: ii
 integer,dimension(:,:),allocatable :: mask
+integer,dimension(:,:),allocatable :: fixmask_2d
 integer,dimension(:,:),allocatable :: nproc_out
 
 ! 2-dimensional, unrolled arrays:
@@ -154,6 +156,8 @@ real,dimension(:),allocatable :: dxn,dxs,dyw,dye
 real,dimension(:),allocatable :: dcp0,dcp,dcg0,dcg
 real,dimension(:),allocatable :: ht,mss,mwd,mwl,mwp,shelt
 real,dimension(:),allocatable :: oneovar,oneovdx,oneovdy
+
+logical,dimension(:),allocatable :: fixmask
 
 real,dimension(:),allocatable :: momx,momy ! momentum in x- and y-direction
 real,dimension(:),allocatable :: cgmxx,cgmxy,cgmyy ! horizontal momentum fluxes

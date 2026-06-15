@@ -87,6 +87,7 @@ contains
 
     ! integrate in time
     do concurrent(i = istart:iend)
+      if (fixmask(i)) cycle
       do concurrent(o = 1:oc(i), p = 1:pm)
           ef(o,p,i) = ef(o,p,i) - 0.25 * dta * flux(o,p,i) * oneovar(i)
 
@@ -176,6 +177,7 @@ contains
       flux = 0
       e(:,:,istart:iend) = ef(:,:,istart:iend)
       do concurrent(i = istart:iend)
+       if (fixmask(i)) cycle
        do concurrent(o = 1:oc(i), p = 1:pm)
 
          ! compute tendencies

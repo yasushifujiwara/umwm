@@ -61,8 +61,13 @@ contains
 
       end if
 
-      wspd_2d = sqrt(uw**2 + vw**2)
-      wdir_2d = atan2(vw, uw)
+      if (currents) then
+         wspd_2d = sqrt((uw-uc)**2 + (vw-vc)**2)
+         wdir_2d = atan2(vw-vc, uw-uc)
+      else
+         wspd_2d = sqrt(uw**2 + vw**2)
+         wdir_2d = atan2(vw, uw)
+      end if
 
       ! remap to 1-d arrays:
       wspd = remap_mn2i(wspd_2d)

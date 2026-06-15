@@ -98,7 +98,7 @@ subroutine output_grid
 
 integer :: ncid
 integer :: xdimid,ydimid
-integer :: lonid,latid,dlonid,dlatid,dxid,dyid,arid,maskid,did,nprocid
+integer :: lonid,latid,dlonid,dlatid,dxid,dyid,arid,maskid,did,nprocid,fixmaskid
 integer :: xid,yid,curvid
 
 if(nproc == 0)then
@@ -118,6 +118,7 @@ if(nproc == 0)then
   call nc_check(nf90_def_var(ncid,'area',NF90_FLOAT,[xdimid,ydimid],arid))
   call nc_check(nf90_def_var(ncid,'depth',NF90_FLOAT,[xdimid,ydimid],did))
   call nc_check(nf90_def_var(ncid,'seamask',nf90_int,[xdimid,ydimid],maskid))
+  call nc_check(nf90_def_var(ncid,'fixmask',nf90_int,[xdimid,ydimid],fixmaskid))  
   call nc_check(nf90_def_var(ncid,'nproc',nf90_int,[xdimid,ydimid],nprocid))
   call nc_check(nf90_enddef(ncid))
   call nc_check(nf90_put_var(ncid,lonid,lon))
@@ -132,6 +133,7 @@ if(nproc == 0)then
   call nc_check(nf90_put_var(ncid,arid,ar_2d))
   call nc_check(nf90_put_var(ncid,maskid,mask))
   call nc_check(nf90_put_var(ncid,did,d_2d))
+  call nc_check(nf90_put_var(ncid,fixmaskid,int(fixmask_2d)))
   call nc_check(nf90_put_var(ncid,nprocid,nproc_out))
   call nc_check(nf90_close(ncid))
 

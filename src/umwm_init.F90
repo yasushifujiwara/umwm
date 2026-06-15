@@ -72,7 +72,7 @@ explim,sin_fac,sin_diss1,sin_diss2,sds_fac,sds_power,mss_fac,snl_fac,&
 sdt_fac,sbf_fac,sbp_fac,snl_mode,split_refraction
 
 namelist /grid/ gridfromfile,delx,dely,topofromfile,dpt,fillestuaries,&
-filllakes
+filllakes,fixmaskfromfile
 
 namelist /forcing/ winds,currents,air_density,water_density,seaice
 
@@ -210,6 +210,7 @@ if(option==1)then
   allocate(lat(mm,nm),lon(mm,nm))
   allocate(x(mm,nm),y(mm,nm))
   allocate(mask(mm,nm))
+  allocate(fixmask(mm,nm))  
   allocate(nproc_out(mm,nm))
   allocate(rhoa_2d(mm,nm),rhow_2d(mm,nm))
   allocate(wspd_2d(mm,nm))
@@ -251,7 +252,10 @@ elseif(option==2)then
   shelt = 0
 
   allocate(physics_time_step(istart:iend))
-  physics_time_step = 0 
+  physics_time_step = 0
+
+  allocate(fixmask(istart:iend))
+  fixmask = .FALSE.
 
   ! mean spectrum quantities:
   allocate(mwd(istart:iend)) ! direction
@@ -550,6 +554,19 @@ if(topofromfile)then ! read depth field from file
 else ! use constant value from namelist
 
   d_2d = dpt
+
+end if
+
+if(fixmaskfromfile)then ! read fixmask field from file
+
+  call nc_check(nf90_open('input/umwm.gridtopo',nf90_nowrite,ncid))
+  call nc_check(nf90_inq_varid(ncid,'fixmask',varid))
+  call nc_check(nf90_get_var(ncid,varid,fixmask_2d))
+  call nc_check(nf90_close(ncid))
+
+else ! use constant value from namelist
+
+  fixmask_2d = 0
 
 end if
 
@@ -914,6 +931,7 @@ if(remap_dir == 'h')then ! column-major
         dx(i) = dx_2d(m,n)
         dy(i) = dy_2d(m,n)
         d(i)  = d_2d(m,n)
+        fixmask(i) = logical(fixmask_2d(m,n))
       end if
     end do
   end do
@@ -926,7 +944,8 @@ if(remap_dir == 'h')then ! column-major
         ii(m,n) = i
         dx(i) = dx_2d(m,n)
         dy(i) = dy_2d(m,n)
-        d(i)  = d_2d(m,n)
+        d(i)  = d_2d(m,n) 
+        fixmask(i) = logical(fixmask_2d(m,n))       
       end if
     end do
   end do
@@ -942,6 +961,7 @@ elseif(remap_dir == 'v')then ! row-major
         dx(i) = dx_2d(m,n)
         dy(i) = dy_2d(m,n)
         d(i)  = d_2d(m,n)
+        fixmask(i) = logical(fixmask_2d(m,n))        
       end if
     end do
   end do
@@ -955,6 +975,7 @@ elseif(remap_dir == 'v')then ! row-major
         dx(i) = dx_2d(m,n)
         dy(i) = dy_2d(m,n)
         d(i)  = d_2d(m,n)
+        fixmask(i) = logical(fixmask_2d(m,n))        
       end if
     end do
   end do
