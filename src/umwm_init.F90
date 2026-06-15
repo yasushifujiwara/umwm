@@ -254,7 +254,7 @@ elseif(option==2)then
   allocate(physics_time_step(istart:iend))
   physics_time_step = 0
 
-  allocate(fixmask(istart:iend))
+  allocate(fixmask(imm))  
   fixmask = .FALSE.
 
   ! mean spectrum quantities:
