@@ -43,7 +43,7 @@ contains
       ssin(o,p,i) = (wspd(i) + 2.5 * ustar(i) * logl2overz(o,i))&
 #endif
                   * cos(wdir(i) - th(p)) - cp0(o,i)&
-                  - uc(i) * cth(p) - vc(i) * sth(p)
+                  - current_factor * (uc(i) * cth(p) + vc(i) * sth(p))
     end do
 
     ssin = sin_fac * abs(ssin) * ssin

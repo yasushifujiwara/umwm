@@ -69,7 +69,7 @@ stoptimestr,dtg,restart
 
 namelist /physics/ g,nu_air,nu_water,sfct,kappa,z,gustiness,dmin,    &
 explim,sin_fac,sin_diss1,sin_diss2,sds_fac,sds_power,mss_fac,snl_fac,&
-sdt_fac,sbf_fac,sbp_fac,snl_mode,split_refraction
+sdt_fac,sbf_fac,sbp_fac,snl_mode,split_refraction,current_factor
 
 namelist /grid/ gridfromfile,delx,dely,topofromfile,dpt,fillestuaries,&
 filllakes,fixmaskfromfile
