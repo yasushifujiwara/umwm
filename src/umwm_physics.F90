@@ -87,7 +87,7 @@ do i = istart, iend
    else
       ef(:,:,i) = e(:,:,i)
    end if
-end if   
+end do
 
 endsubroutine source
 
