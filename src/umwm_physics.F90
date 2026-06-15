@@ -84,7 +84,7 @@ end do
 do i = istart, iend
    if (.not. fixmask(i)) then
       e(:,:,i) = 0.5*(e(:,:,i)+ef(:,:,i))
-   else if
+   else
       ef(:,:,i) = e(:,:,i)
    end if
 end if   
