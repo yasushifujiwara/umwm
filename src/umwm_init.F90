@@ -210,7 +210,7 @@ if(option==1)then
   allocate(lat(mm,nm),lon(mm,nm))
   allocate(x(mm,nm),y(mm,nm))
   allocate(mask(mm,nm))
-  allocate(fixmask(mm,nm))  
+  allocate(fixmask_2d(mm,nm))  
   allocate(nproc_out(mm,nm))
   allocate(rhoa_2d(mm,nm),rhow_2d(mm,nm))
   allocate(wspd_2d(mm,nm))
@@ -931,7 +931,7 @@ if(remap_dir == 'h')then ! column-major
         dx(i) = dx_2d(m,n)
         dy(i) = dy_2d(m,n)
         d(i)  = d_2d(m,n)
-        fixmask(i) = logical(fixmask_2d(m,n))
+        fixmask(i) = (fixmask_2d(m,n) /= 0)
       end if
     end do
   end do
@@ -945,7 +945,7 @@ if(remap_dir == 'h')then ! column-major
         dx(i) = dx_2d(m,n)
         dy(i) = dy_2d(m,n)
         d(i)  = d_2d(m,n) 
-        fixmask(i) = logical(fixmask_2d(m,n))       
+        fixmask(i) = (fixmask_2d(m,n) /= 0)
       end if
     end do
   end do
@@ -961,7 +961,7 @@ elseif(remap_dir == 'v')then ! row-major
         dx(i) = dx_2d(m,n)
         dy(i) = dy_2d(m,n)
         d(i)  = d_2d(m,n)
-        fixmask(i) = logical(fixmask_2d(m,n))        
+        fixmask(i) = (fixmask_2d(m,n) /= 0)
       end if
     end do
   end do
@@ -975,7 +975,7 @@ elseif(remap_dir == 'v')then ! row-major
         dx(i) = dx_2d(m,n)
         dy(i) = dy_2d(m,n)
         d(i)  = d_2d(m,n)
-        fixmask(i) = logical(fixmask_2d(m,n))        
+        fixmask(i) = (fixmask_2d(m,n) /= 0)
       end if
     end do
   end do
