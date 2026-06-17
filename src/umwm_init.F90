@@ -542,6 +542,9 @@ else ! use constant value from namelist
     y(:,n) = y(:,n-1)+0.5*(dy_2d(:,n-1)+dy_2d(:,n))
   end do
 
+  lon(:,:) = x
+  lat(:,:) = y
+
 end if
 
 if(topofromfile)then ! read depth field from file
